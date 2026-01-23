@@ -1,0 +1,48 @@
+# ASTADIG: ROADMAP TO FUNCTIONAL REALITY
+# What needs to be done to move from "Prototype" to "Production SOC"
+
+0. PRE-FLIGHT CHECK
+===================
+[ ] Push current code to GitHub.
+[ ] Create a live Firebase Project (if using a test one currently).
+[ ] Update firebase.json with final "hosting" configuration.
+
+1. FUNCTIONAL TOOL IMPLEMENTATION (Make the UI do work)
+=======================================================
+The dashboard currently has 30 beautiful "shells". We need to wire them to real APIs.
+
+[ ] URL Scanner (Web-Shield):
+    - Create a Cloud Function to call VirusTotal API.
+    - Pass user input from the widget -> Cloud Function -> VirusTotal.
+    - Display the "Malicious/Clean" result in the widget.
+
+[ ] IP Analyzer (Perimeter):
+    - Integrate `ip-api.com` or Shodan API.
+    - Fetch geolocation and ISP data for the input IP.
+
+[ ] File Sandbox (Red-Zone):
+    - Implement file upload in the "Detonation Chamber".
+    - Send file hash to HybridAnalysis or Cuckoo Sandbox API.
+
+2. BACKEND & SECURITY
+=====================
+[ ] Firestore Rules:
+    - Write strict security rules. Only allowing authenticated users to write their own logs.
+    - Lock down the "Admin" collection so only YOU can read it.
+    
+[ ] Real Admin Feed:
+    - Connect the `admin.html` map to the actual Firestore `logs` collection.
+    - When a user logs in, their real GeoIP should appear as a marker on your Admin Map.
+
+3. REFINEMENT
+=============
+[ ] Mobile Responsiveness:
+    - The Premium Dashboard is complex. Use CSS `@media` queries to stack the widgets on mobile screens.
+    
+[ ] Sound FX (Audio Flux):
+    - Re-enable the `audio/` files for "Access Granted" and "Alert" sounds (browser policies often block auto-play, need to handle "Click to Enable Audio").
+
+4. DEPLOYMENT
+=============
+[ ] Host on Vercel or Netlify (Easier for CI/CD than GitHub Pages for dynamic apps).
+[ ] Link your custom domain (e.g., `soc.yourdomain.com`).

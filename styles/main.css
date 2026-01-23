@@ -1,0 +1,393 @@
+:root {
+    --transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* THEMES */
+body[data-state="calm"] {
+    --neon: #00F0FF;
+    --glow: rgba(0, 240, 255, 0.4);
+}
+
+body[data-state="anxious"] {
+    --neon: #FF0055;
+    --glow: rgba(255, 0, 85, 0.5);
+}
+
+body[data-state="stealth"] {
+    --neon: #00FF41;
+    --glow: rgba(0, 255, 65, 0.3);
+}
+
+body[data-state="overload"] {
+    --neon: #BC13FE;
+    --glow: rgba(188, 19, 254, 0.6);
+}
+
+/* SIDEBAR & LOGO */
+.main-logo {
+    filter: drop-shadow(0 0 15px var(--glow));
+    transition: transform 0.6s var(--transition);
+    animation: logo-pulse 4s infinite ease-in-out;
+}
+
+@keyframes logo-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px var(--glow));
+    }
+
+    50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 25px var(--neon));
+    }
+}
+
+.nav-gif {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 5px var(--neon));
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+/* BRACKET NAV HOVER */
+.nav-item {
+    position: relative;
+    padding: 12px 16px 12px 20px;
+    color: #666;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-right: 2px solid transparent;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03));
+    color: #fff;
+    border-right-color: var(--neon);
+}
+
+.nav-item .nav-text {
+    position: relative;
+    z-index: 2;
+    transition: 0.3s;
+}
+
+.nav-item:hover .nav-text {
+    transform: translateX(5px);
+    text-shadow: 0 0 8px var(--neon);
+}
+
+.nav-item img {
+    transition: 0.3s;
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
+
+.nav-item:hover img,
+.nav-item.active img {
+    opacity: 1;
+    filter: grayscale(0%) drop-shadow(0 0 5px var(--neon));
+}
+
+/* --- ADVANCED GLITCH TEXT --- */
+.glitch {
+    position: relative;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #08080a;
+    /* Matches footer bg */
+    opacity: 0.7;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-1 3s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+}
+
+/* On hover, the glitch gets aggressive */
+.glitch:hover {
+    color: var(--neon);
+    text-shadow: 0 0 5px var(--neon);
+}
+
+.glitch:hover::before {
+    animation: glitch-anim-1 0.4s infinite linear alternate-reverse;
+    text-shadow: -2px 0 #ff0055;
+    opacity: 1;
+}
+
+.glitch:hover::after {
+    animation: glitch-anim-2 0.4s infinite linear alternate-reverse;
+    text-shadow: -2px 0 #00F0FF;
+    opacity: 1;
+}
+
+@keyframes glitch-anim-1 {
+    0% {
+        clip: rect(20px, 9999px, 81px, 0);
+        transform: translate(1px, 1px);
+    }
+
+    20% {
+        clip: rect(65px, 9999px, 8px, 0);
+        transform: translate(-1px, -1px);
+    }
+
+    40% {
+        clip: rect(11px, 9999px, 55px, 0);
+        transform: translate(0px, 1px);
+    }
+
+    60% {
+        clip: rect(89px, 9999px, 22px, 0);
+        transform: translate(1px, -1px);
+    }
+
+    80% {
+        clip: rect(44px, 9999px, 63px, 0);
+        transform: translate(0px, 0px);
+    }
+
+    100% {
+        clip: rect(32px, 9999px, 94px, 0);
+        transform: translate(-1px, 1px);
+    }
+}
+
+@keyframes glitch-anim-2 {
+    0% {
+        clip: rect(89px, 9999px, 44px, 0);
+        transform: translate(-1px, 0px);
+    }
+
+    20% {
+        clip: rect(13px, 9999px, 67px, 0);
+        transform: translate(2px, -1px);
+    }
+
+    40% {
+        clip: rect(78px, 9999px, 21px, 0);
+        transform: translate(-1px, 2px);
+    }
+
+    60% {
+        clip: rect(15px, 9999px, 92px, 0);
+        transform: translate(1px, -1px);
+    }
+
+    80% {
+        clip: rect(56px, 9999px, 34px, 0);
+        transform: translate(-2px, 2px);
+    }
+
+    100% {
+        clip: rect(2px, 9999px, 19px, 0);
+        transform: translate(1px, 0px);
+    }
+}
+
+
+/* --- UNIQUE MOOD BUTTONS (TACTICAL TABS) --- */
+.mood-overlay {
+    background: transparent !important;
+    border: none !important;
+    gap: 10px !important;
+    padding: 0 !important;
+}
+
+.mood-btn {
+    flex: 1;
+    height: 40px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #666;
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.mood-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.mood-btn:hover {
+    border-color: var(--neon);
+    color: var(--neon);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 5px var(--neon);
+}
+
+.mood-btn:hover::before {
+    left: 100%;
+}
+
+/* Active State styling logic linked to data-state */
+body[data-state="calm"] .mood-btn:nth-child(1),
+body[data-state="anxious"] .mood-btn:nth-child(2),
+body[data-state="stealth"] .mood-btn:nth-child(3),
+body[data-state="overload"] .mood-btn:nth-child(4) {
+    background: var(--neon);
+    color: #000;
+    border-color: var(--neon);
+    box-shadow: 0 0 20px var(--glow), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    /* Straighten on active */
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+
+.gif-glow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: cleanWave 2.5s infinite ease-in-out;
+    animation-delay: calc(var(--i) * 0.12s);
+}
+
+.mini-img {
+    width: 32px;
+    height: 32px;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 5px var(--neon));
+}
+
+@keyframes cleanWave {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: translateY(-10px);
+        filter: brightness(1.4) drop-shadow(0 0 20px var(--neon));
+    }
+}
+
+/* LEAFLET DARK MODE */
+.leaflet-tile {
+    filter: brightness(0.8) contrast(1.2);
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    aside {
+        width: 100% !important;
+        height: auto !important;
+        border-right: none;
+        border-bottom: 2px solid var(--neon);
+    }
+
+    aside nav {
+        flex-direction: row !important;
+        overflow-x: auto;
+        padding: 5px !important;
+        gap: 5px !important;
+    }
+
+    .nav-item {
+        flex-direction: column;
+        padding: 10px !important;
+        min-width: 70px;
+        text-align: center;
+        font-size: 8px;
+    }
+
+    .nav-gif {
+        width: 18px;
+        height: 18px;
+    }
+
+    .nav-divider {
+        display: none;
+    }
+
+    .main-content {
+        padding: 10px !important;
+        flex: 1;
+        overflow-y: visible !important;
+    }
+
+    #dynamic-stage .flex-\[3\],
+    #dynamic-stage .flex {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+
+    .w-96 {
+        width: 100% !important;
+        margin-top: 20px;
+    }
+
+    #map {
+        height: 250px !important;
+        width: 100% !important;
+    }
+
+    footer {
+        scale: 0.8;
+        padding: 10px 0 !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .nav-text {
+        display: none;
+    }
+
+    .main-logo {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}

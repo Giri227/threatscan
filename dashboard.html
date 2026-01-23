@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astadig | Neural Phase SOC</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body data-state="calm" class="font-mono overflow-hidden bg-[#060608] text-white">
+
+    <div class="dashboard-container flex h-screen">
+        <aside class="w-72 border-r border-white/5 bg-[#0c0c0f] flex flex-col z-50">
+            <div class="py-8 mb-2 flex flex-col items-center border-b border-white/5 mx-6">
+                <div class="relative group">
+                    <img src="images/logo.png" class="w-20 h-20 object-contain main-logo" alt="Astadig">
+                    <div
+                        class="absolute -inset-2 bg-cyan-500/20 blur-xl opacity-0 group-hover:opacity-100 transition duration-500 rounded-full">
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <h2 class="text-[10px] font-black tracking-[4px] text-white">THREATSCAN</h2>
+                    <h3 class="text-[7px] font-bold tracking-[2px] text-cyan-500 opacity-80">SECURITY SUITE</h3>
+                    <div class="h-[1px] w-8 bg-cyan-500/30 my-1 mx-auto"></div>
+                    <p class="text-[6px] font-medium tracking-widest text-gray-500 uppercase">Powered by ASTADIG</p>
+                </div>
+            </div>
+
+            <nav class="flex flex-col gap-1 px-4 py-4 text-xs font-bold uppercase tracking-wider overflow-y-auto">
+                <div class="nav-item active" onclick="Dashboard.loadView('home')">
+                    <img src="images/icons/house.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">HOME</span>
+                </div>
+
+                <div class="nav-divider text-[9px] opacity-30 tracking-[4px] py-4 pl-2 mt-2 border-t border-white/5">
+                    SECURITY SEGMENTS</div>
+
+                <!-- ... existing items ... -->
+                <!-- (Note: I'll keep the existing items but the replace_file_content will handle the block) -->
+                <div class="nav-item" onclick="Dashboard.loadView('perimeter')">
+                    <img src="images/icons/shield.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">01. PERIMETER</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('web-shield')">
+                    <img src="images/icons/internet-security.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">02. WEB-SHIELD</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('vault')">
+                    <img src="images/icons/lock.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">03. VAULT</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('cognitive')">
+                    <img src="images/icons/artificial-intelligence.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">04. COGNITIVE</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('cipher-lab')">
+                    <img src="images/icons/encryption.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">05. CIPHER LAB</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('red-zone')">
+                    <img src="images/icons/no-data.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">06. RED-ZONE</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('blue-zone')">
+                    <img src="images/icons/hacker.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">07. BLUE-ZONE</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('command')">
+                    <img src="images/icons/interface.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">08. COMMAND</span>
+                </div>
+                <div class="nav-item" onclick="Dashboard.loadView('system-intelligence')">
+                    <img src="images/icons/interface.gif" class="nav-gif" alt="ICON">
+                    <span class="nav-text">09. SYSTEM INTEL</span>
+                </div>
+
+                <div
+                    class="nav-divider text-[9px] opacity-30 tracking-[4px] py-4 pl-2 mt-4 border-t border-white/5 uppercase">
+                    Audit Logs</div>
+                <div id="recent-logs" class="px-2 space-y-2 max-h-40 overflow-y-auto scrollbar-hide">
+                    <div class="text-[8px] text-gray-600 animate-pulse italic">Connecting to Neural Feed...</div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content flex-1 flex flex-col p-8 pb-2 overflow-hidden relative">
+
+            <div id="dynamic-stage" class="flex-1 flex flex-col overflow-hidden">
+                <div class="flex flex-[3] gap-6 min-h-0 mb-4 h-full">
+                    <div class="flex-1 relative border border-white/10 rounded-xl overflow-hidden bg-black shadow-2xl">
+                        <div id="map" class="h-full w-full"></div>
+                        <div class="absolute top-6 left-6 z-[500]">
+                            <div
+                                class="bg-black/90 border border-neon px-4 py-2 rounded-md shadow-[0_0_15px_var(--glow)]">
+                                <span id="map-status"
+                                    class="text-xs font-black tracking-[4px] text-neon uppercase animate-pulse">ASN_NODE_ONLINE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="w-96 bg-[#0c0c0f] border border-white/10 rounded-xl p-8 flex flex-col gap-8 shadow-2xl relative">
+                        <div class="mood-overlay flex gap-2 bg-black/60 rounded-lg p-2 border border-white/5">
+                            <button onclick="Flux.set('calm')" class="mood-btn">CALM</button>
+                            <button onclick="Flux.set('anxious')" class="mood-btn">ANXIOUS</button>
+                            <button onclick="Flux.set('stealth')" class="mood-btn">STEALTH</button>
+                            <button onclick="Flux.set('overload')" class="mood-btn">OVERLOAD</button>
+                        </div>
+
+                        <div class="space-y-8">
+                            <div class="data-row">
+                                <span
+                                    class="text-[9px] opacity-30 uppercase tracking-widest block mb-2">Network_Address</span>
+                                <span class="text-neon text-3xl font-black block" id="user-ip">DETECTING...</span>
+                            </div>
+                            <div class="data-row">
+                                <span
+                                    class="text-[9px] opacity-30 uppercase tracking-widest block mb-2">ASN_Organization</span>
+                                <span class="text-white text-lg font-bold block" id="user-isp">ENCRYPTED</span>
+                            </div>
+                            <div class="data-row">
+                                <span
+                                    class="text-[9px] opacity-30 uppercase tracking-widest block mb-2">Geo_Coordinate</span>
+                                <span class="text-white text-lg font-medium block" id="user-loc">TRIANGULATING...</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-4 border-t border-white/5 flex items-center gap-4">
+                            <div class="w-2 h-2 rounded-full bg-neon animate-ping"></div>
+                            <span class="text-[10px] font-bold opacity-30 tracking-[4px]">SECURE_LINK_ESTABLISHED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer
+                class="flex flex-col items-center justify-center py-2 border-t border-white/5 bg-[#08080a] gap-1 mt-auto rounded-t-xl mx-4">
+                <div class="flex gap-2 opacity-80 hover:opacity-100 transition scale-75 origin-bottom">
+                    <div class="gif-glow" style="--i:1"><img src="images/a.gif" class="mini-img"></div>
+                    <div class="gif-glow" style="--i:2"><img src="images/s.gif" class="mini-img"></div>
+                    <div class="gif-glow" style="--i:3"><img src="images/t.gif" class="mini-img"></div>
+                    <div class="gif-glow" style="--i:4"><img src="images/a.gif" class="mini-img"></div>
+                    <div class="gif-glow" style="--i:5"><img src="images/d.gif" class="mini-img"></div>
+                    <div class="gif-glow" style="--i:6"><img src="images/i.gif" class="mini-img"></div>
+                    <div class="gif-glow" style="--i:7"><img src="images/g.gif" class="mini-img"></div>
+                </div>
+
+                <div class="text-center translate-y-[-5px]">
+                    <div class="glitch-wrapper flex flex-wrap justify-center gap-x-4">
+                        <span class="glitch text-[9px] font-bold tracking-widest cursor-crosshair opacity-60"
+                            data-text="@GIRIDHAR PAI">@GIRIDHAR PAI</span>
+                        <span class="glitch text-[9px] font-bold tracking-widest cursor-crosshair opacity-60"
+                            data-text="@WHITEHATWOLF">@WHITEHATWOLF</span>
+                        <span class="glitch text-[9px] font-bold tracking-widest cursor-crosshair opacity-60"
+                            data-text="@JESTEENA MARY OOMMEN">@JESTEENA MARY OOMMEN</span>
+                        <span class="glitch text-[9px] font-bold tracking-widest cursor-crosshair opacity-60"
+                            data-text="@LUNA PHOENIX">@LUNA PHOENIX</span>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script type="module">
+        import { Flux } from "./scripts/flux.js";
+        import { Dashboard } from "./scripts/dashboard.js";
+        import { initAuth, db, doc, getDoc } from "./scripts/auth.js";
+
+        window.Flux = Flux;
+        window.Dashboard = Dashboard;
+
+        // === AUTHENTICATION & PROFILE SYNC ===
+        initAuth(async (user) => {
+            if (!user) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const sidebar = document.querySelector('aside nav');
+
+                    const profileDiv = document.createElement('div');
+                    profileDiv.className = "mt-auto p-4 border-t border-white/5 bg-white/5 rounded-lg mb-4 mx-2";
+                    profileDiv.innerHTML = `
+                        <div class="flex items-center gap-3 mb-3">
+                            <img src="${userData.avatar}" class="w-12 h-12 rounded-full border-2 border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]" alt="Avatar">
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[11px] font-bold text-cyan-400 truncate uppercase">${userData.username}</div>
+                                <div class="text-[8px] text-gray-500 uppercase tracking-tighter">${userData.role}</div>
+                            </div>
+                        </div>
+                        <button onclick="handleLogout()" class="w-full text-[10px] py-2 bg-red-900/10 border border-red-500/30 text-red-400 rounded hover:bg-red-500/20 transition font-black tracking-widest">
+                            DISCONNECT
+                        </button>
+                    `;
+                    sidebar.appendChild(profileDiv);
+                }
+            } catch (error) {
+                console.error("[AUTH] Profile load failed:", error);
+            }
+        });
+
+        window.handleLogout = async () => {
+            const { logoutUser } = await import("./scripts/auth.js");
+            await logoutUser();
+            window.location.href = "index.html";
+        };
+
+        // === PRECISION GEOLOCATION SYSTEM ===
+        async function initGeo() {
+            const mapEl = document.getElementById('map');
+            if (!mapEl) return;
+
+            if (mapEl._leaflet_id) {
+                mapEl.innerHTML = "";
+                mapEl._leaflet_id = null;
+            }
+
+            const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([20, 0], 2);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+            const statusEl = document.getElementById('map-status');
+
+            try {
+                if (statusEl) statusEl.innerText = "TRIANGULATING_SIGNAL...";
+
+                // PHASE 1: PRECISION IDENTITY (Get pure Public IP)
+                const idRes = await fetch('https://api.ipify.org?format=json');
+                const idData = await idRes.json();
+                const preciseIP = idData.ip;
+                document.getElementById('user-ip').innerText = preciseIP;
+
+                // PHASE 2: DEEP SCAN (Get Details for IP)
+                let geoData = {};
+                try {
+                    const scanRes = await fetch(`https://ipapi.co/${preciseIP}/json/`);
+                    const scanData = await scanRes.json();
+                    if (scanData.error) throw new Error("API_LIMIT");
+                    geoData = {
+                        ip: preciseIP,
+                        org: scanData.org,
+                        city: scanData.city,
+                        country: scanData.country_name,
+                        lat: scanData.latitude,
+                        lon: scanData.longitude
+                    };
+                } catch (err) {
+                    // Fallback to ip-api
+                    const fbRes = await fetch(`http://ip-api.com/json/${preciseIP}`);
+                    const fbData = await fbRes.json();
+                    geoData = {
+                        ip: preciseIP,
+                        org: fbData.isp,
+                        city: fbData.city,
+                        country: fbData.country,
+                        lat: fbData.lat,
+                        lon: fbData.lon
+                    };
+                }
+
+                document.getElementById('user-isp').innerText = geoData.org || "UPLINK_ANONYMIZED";
+                document.getElementById('user-loc').innerText = `${geoData.city}, ${geoData.country}`.toUpperCase();
+                if (statusEl) statusEl.innerText = "TARGET_ACQUIRED";
+
+                if (geoData.lat && geoData.lon) {
+                    const coords = [geoData.lat, geoData.lon];
+                    map.flyTo(coords, 12, { animate: true, duration: 2.5 });
+
+                    L.circle(coords, {
+                        color: 'var(--neon)',
+                        fillColor: 'var(--neon)',
+                        fillOpacity: 0.1,
+                        radius: 3000,
+                        weight: 1,
+                        dashArray: '5, 5'
+                    }).addTo(map);
+
+                    L.circleMarker(coords, { radius: 6, color: '#fff', fillColor: 'var(--neon)', fillOpacity: 1 }).addTo(map);
+                }
+            } catch (error) {
+                console.error("SOC Uplink Error:", error);
+                if (statusEl) statusEl.innerText = "CONNECTION_SCRAMBLED";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Flux.init();
+            Dashboard.init();
+            setTimeout(initGeo, 500);
+        });
+
+        window.initGeo = initGeo;
+    </script>
+</body>
+
+</html>

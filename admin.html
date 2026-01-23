@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; 
+        script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://www.gstatic.com https://unpkg.com; 
+        style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com; 
+        img-src 'self' data: https://unpkg.com https://*.openstreetmap.org https://*.basemaps.cartocdn.com; 
+        font-src 'self' https://fonts.gstatic.com; 
+        connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://ipapi.co https://ipwho.is https://extreme-ip-lookup.com;">
+
+    <title>Astadig | Admin SOC</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body class="bg-black text-cyan-500 font-mono h-screen flex flex-col">
+
+    <header class="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-900 shadow-lg">
+        <h1 class="text-2xl font-bold tracking-tighter">DECRYPAI <span class="text-red-500 underline decoration-2">ADMIN
+                SOC</span></h1>
+        <div class="text-[10px] text-gray-500 uppercase tracking-widest">Restricted Access // Level 5 Encryption Active
+        </div>
+    </header>
+
+    <div id="map" class="flex-1 w-full bg-[#0a0a0c] relative z-0"></div>
+
+    <div
+        class="absolute top-24 right-6 w-80 bg-black/80 border border-cyan-500/50 p-4 rounded-lg z-[1000] backdrop-blur-md max-h-[400px] overflow-y-auto">
+        <h3 class="text-xs font-black border-b border-cyan-500 mb-3 pb-2 flex justify-between">
+            <span>LIVE DECRYPTED FEED</span>
+            <span class="animate-pulse text-red-500">● LIVE</span>
+        </h3>
+        <div id="feed-log" class="space-y-3">
+            <div class="text-gray-500 italic text-[10px]">Waiting for flux streams...</div>
+        </div>
+    </div>
+
+    <footer class="p-4 bg-gray-900 border-t border-gray-800 text-[9px] flex justify-between items-center text-gray-500">
+        <div>@GIRIDHAR PAI | @WHITEHATWOLF | @JESTEENA MARY OOMMEN | @LUNA PHOENIX</div>
+        <div class="font-bold">PROJECT ASTADIG v1.0.0</div>
+    </footer>
+
+    <script type="module">
+        import { db, initAuth, doc, getDoc } from "./scripts/auth.js";
+        import { collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { encryp_ai } from "./scripts/encrypAI.js";
+
+        // === ADMIN-ONLY AUTH GUARD ===
+        initAuth(async (user) => {
+            if (!user) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    console.log(`[AUTH] Admin verified: ${userDoc.data().username}`);
+                } else {
+                    console.warn("[AUTH] Forbidden: Admin role required");
+                    window.location.href = "dashboard.html";
+                }
+            } catch (error) {
+                window.location.href = "index.html";
+            }
+        });
+
+        // Initialize Map with Dark Mode Tiles
+        const map = L.map('map', { zoomControl: false }).setView([20, 0], 2);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CartoDB'
+        }).addTo(map);
+
+        const feedLog = document.getElementById('feed-log');
+
+        async function resolveGeo(ip) {
+            const providers = [
+                `https://ipapi.co/${ip}/json/`,
+                `https://ipwho.is/${ip}`,
+                `https://extreme-ip-lookup.com/json/${ip}`
+            ];
+
+            for (let url of providers) {
+                try {
+                    const res = await fetch(url);
+                    const d = await res.json();
+                    const lat = d.latitude || d.lat;
+                    const lon = d.longitude || d.lon;
+                    const city = d.city || "Unknown Node";
+                    if (lat && lon) return { lat, lon, city };
+                } catch (e) { continue; }
+            }
+            return null;
+        }
+
+        // Firebase Real-time Listener
+        onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(20)), (snapshot) => {
+            snapshot.docChanges().forEach(async (change) => {
+                if (change.type === "added") {
+                    const data = change.doc.data();
+                    try {
+                        const decrypted = encryp_ai.decrypt(data.payload);
+                        // Parsing "USER:name|ACT:login|IP:1.1.1.1"
+                        const parts = Object.fromEntries(decrypted.split('|').map(s => s.split(':')));
+
+                        // 1. Update the UI Feed
+                        const entry = document.createElement('div');
+                        entry.className = "border-l-2 border-cyan-500 pl-3 py-1 bg-cyan-500/5 animate-in fade-in slide-in-from-right-2 duration-500";
+                        entry.innerHTML = `
+                            <div class="text-cyan-400 font-bold uppercase text-[10px]">${parts.ACT || 'UNKNOWN_EVT'}</div>
+                            <div class="text-white text-[11px]">${parts.USER || 'Anonymous'}</div>
+                            <div class="text-gray-500 text-[9px] tabular-nums">${parts.IP || '0.0.0.0'}</div>
+                        `;
+                        if (feedLog.children[0]?.classList.contains('italic')) feedLog.innerHTML = '';
+                        feedLog.prepend(entry);
+
+                        // 2. Update Map Plot
+                        if (parts.IP && parts.IP !== "0.0.0.0") {
+                            const geo = await resolveGeo(parts.IP);
+                            if (geo) {
+                                L.circleMarker([geo.lat, geo.lon], {
+                                    radius: 6, fillColor: "#00F0FF", color: "#fff", weight: 2, fillOpacity: 0.8
+                                }).addTo(map)
+                                    .bindPopup(`<div style="color:black; font-family:monospace; font-size:11px;"><b>${parts.USER}</b><br>${geo.city}</div>`)
+                                    .openPopup();
+
+                                map.flyTo([geo.lat, geo.lon], 6);
+                            }
+                        }
+                    } catch (err) { console.error("Decryption Error:", err); }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

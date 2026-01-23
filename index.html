@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astadig | Neural Entry Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+
+        :root {
+            --neon-cyan: #00f2ff;
+            --dark-bg: #020617;
+            --glitch-red: #ff003c;
+            --glitch-green: #00ff41;
+            --glitch-magenta: #ff00c1;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            font-family: 'Space Mono', monospace;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Scanline and Canvas background */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        .glass-panel {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .bracket {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--neon-cyan);
+            filter: drop-shadow(0 0 5px var(--neon-cyan));
+        }
+
+        /* --- COLOURED GLITCH LABEL --- */
+        .glitch-label {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            text-shadow: -2px 0 var(--glitch-red), 2px 0 var(--neon-cyan);
+            animation: glitch-color-shake 2.5s infinite linear alternate-reverse;
+        }
+
+        .glitch-label::before,
+        .glitch-label::after {
+            content: "DEVELOPED BY:";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-label::before {
+            left: 3px;
+            text-shadow: -3px 0 var(--glitch-magenta);
+            clip: rect(24px, 400px, 90px, 0);
+            animation: glitch-anim-1 1.5s infinite linear alternate-reverse;
+        }
+
+        .glitch-label::after {
+            left: -3px;
+            text-shadow: -3px 0 var(--glitch-green);
+            clip: rect(85px, 400px, 140px, 0);
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-color-shake {
+            0% {
+                transform: skew(0deg);
+                text-shadow: -2px 0 var(--glitch-red), 2px 0 var(--neon-cyan);
+            }
+
+            5% {
+                transform: skew(5deg);
+                text-shadow: 4px 0 var(--glitch-red), -4px 0 var(--glitch-green);
+            }
+
+            10% {
+                transform: skew(-5deg);
+                text-shadow: -3px 0 var(--glitch-magenta), 3px 0 var(--neon-cyan);
+            }
+
+            15% {
+                transform: skew(0deg);
+            }
+
+            100% {
+                transform: skew(0deg);
+            }
+        }
+
+        @keyframes glitch-anim-1 {
+            0% {
+                clip: rect(10px, 9999px, 30px, 0);
+                transform: translate(3px, -2px);
+            }
+
+            20% {
+                clip: rect(50px, 9999px, 60px, 0);
+                transform: translate(-2px, 2px);
+            }
+
+            100% {
+                clip: rect(10px, 9999px, 90px, 0);
+                transform: translate(0);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip: rect(70px, 9999px, 95px, 0);
+                transform: translate(-3px, 2px);
+            }
+
+            25% {
+                clip: rect(20px, 9999px, 45px, 0);
+                transform: translate(3px, -2px);
+            }
+
+            100% {
+                clip: rect(20px, 9999px, 50px, 0);
+                transform: translate(0);
+            }
+        }
+
+        /* --- NEW FONT FOR NAMES --- */
+        .footer-text-main {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 2px;
+            word-spacing: 4px;
+        }
+
+        .footer-sub-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+        }
+
+        .cyber-gif {
+            width: 40px;
+            height: 40px;
+            filter: hue-rotate(170deg) brightness(1.2);
+            opacity: 0.8;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center justify-center h-screen">
+    <div class="scanline"></div>
+    <canvas id="cyber-canvas" class="absolute inset-0 z-0"></canvas>
+
+    <div id="auth-container" class="relative z-10 w-full max-w-sm p-1">
+        <div class="bracket top-0 left-0 border-r-0 border-b-0"></div>
+        <div class="bracket top-0 right-0 border-l-0 border-b-0"></div>
+        <div class="bracket bottom-0 left-0 border-r-0 border-t-0"></div>
+        <div class="bracket bottom-0 right-0 border-l-0 border-t-0"></div>
+
+        <div class="glass-panel rounded-lg overflow-hidden relative shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+            <div class="h-1 w-full bg-cyan-500 shadow-[0_0_15px_#00f2ff]"></div>
+
+            <div class="p-6 text-center">
+                <h1 class="text-3xl font-black tracking-widest text-white">ASTA<span class="text-cyan-500">DIG</span>
+                </h1>
+                <p class="text-[8px] tracking-[0.4em] text-cyan-500/80 uppercase mt-1">System_Entry_v1.1.0</p>
+            </div>
+
+            <div class="flex border-y border-cyan-900/50 text-[10px] font-bold">
+                <button onclick="switchTab('login')" id="t-login"
+                    class="flex-1 py-3 bg-cyan-500/20 text-cyan-400 border-r border-cyan-900/50">LOGIN</button>
+                <button onclick="switchTab('register')" id="t-reg" class="flex-1 py-3 text-cyan-900">REGISTER</button>
+            </div>
+
+            <!-- LOGIN FORM (Wired) -->
+            <div id="form-login" class="p-6 space-y-4">
+                <input id="login-email" type="text" placeholder="IDENTITY (EMAIL)"
+                    class="w-full bg-black/40 border border-cyan-900/50 p-3 rounded text-cyan-400 outline-none focus:border-cyan-400 text-xs shadow-inner">
+                <input id="login-pass" type="password" placeholder="PASSPHRASE"
+                    class="w-full bg-black/40 border border-cyan-900/50 p-3 rounded text-cyan-400 outline-none focus:border-cyan-400 text-xs shadow-inner">
+                <button id="btn-login" onclick="handleLogin()"
+                    class="w-full bg-cyan-500 py-3 font-bold text-black rounded uppercase tracking-widest text-xs hover:bg-cyan-400 transition-colors shadow-[0_0_15px_rgba(0,242,255,0.4)]">
+                    <span class="scramble-text">Execute_Link</span>
+                </button>
+                <div id="login-msg" class="text-[10px] text-center text-red-500 h-4 font-mono"></div>
+            </div>
+
+            <!-- REGISTER FORM (Wired & Hidden) -->
+            <div id="form-register" class="p-6 space-y-4 hidden">
+                <input id="reg-username" type="text" placeholder="CODENAME (USER)"
+                    class="w-full bg-black/40 border border-cyan-900/50 p-3 rounded text-cyan-400 outline-none focus:border-cyan-400 text-xs shadow-inner">
+                <input id="reg-email" type="email" placeholder="NEURAL_ID (EMAIL)"
+                    class="w-full bg-black/40 border border-cyan-900/50 p-3 rounded text-cyan-400 outline-none focus:border-cyan-400 text-xs shadow-inner">
+                <input id="reg-pass" type="password" placeholder="SET_PASSPHRASE"
+                    class="w-full bg-black/40 border border-cyan-900/50 p-3 rounded text-cyan-400 outline-none focus:border-cyan-400 text-xs shadow-inner">
+                <button id="btn-reg" onclick="handleRegister()"
+                    class="w-full border border-cyan-500 text-cyan-500 py-3 font-bold rounded uppercase tracking-widest text-xs hover:bg-cyan-500/10 transition-colors">
+                    <span class="scramble-text">Request_Access</span>
+                </button>
+                <div id="reg-msg" class="text-[10px] text-center text-red-500 h-4 font-mono"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="fixed bottom-0 w-full z-50 pb-8 pt-4 bg-black/95 border-t border-cyan-900/30">
+        <div class="max-w-6xl mx-auto flex flex-col items-center gap-5">
+            <div class="flex justify-center items-center gap-2">
+                <img src="images/sub/score.gif" class="cyber-gif" alt="A">
+                <img src="images/sub/s.gif" class="cyber-gif" alt="S">
+                <img src="images/sub/t-junction.gif" class="cyber-gif" alt="T">
+                <img src="images/sub/vitamin-a.gif" class="cyber-gif" alt="A">
+                <img src="images/sub/vitamin-d.gif" class="cyber-gif" alt="D">
+                <img src="images/sub/i.gif" class="cyber-gif" alt="I">
+                <img src="images/sub/g.gif" class="cyber-gif" alt="G">
+            </div>
+
+            <div class="text-center">
+                <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 mb-2">
+                    <span class="glitch-label text-[10px]">DEVELOPED BY:</span>
+                    <span class="footer-text-main text-[12px] tracking-tighter uppercase">
+                        @GIRIDHAR PAI | @WHITEHATWOLF | @JESTEENA MARY OOMMEN | @LUNA PHOENIX
+                    </span>
+                </div>
+                <div
+                    class="footer-sub-text flex justify-center items-center gap-3 text-[10px] text-zinc-500 tracking-[0.4em] uppercase">
+                    <span>Project Astadig v1.1.0</span>
+                    <span class="text-cyan-900">//</span>
+                    <span>Premium Synesthetic SOC &copy; 2026</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { loginUser, registerUser } from "./scripts/auth.js";
+
+        // Particle Canvas Logic (User Provided)
+        const canvas = document.getElementById('cyber-canvas');
+        const ctx = canvas.getContext('2d');
+        let pts = [];
+        const mouse = { x: null, y: null };
+
+        window.onmousemove = (e) => { mouse.x = e.x; mouse.y = e.y; };
+
+        function init() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            pts = [];
+            for (let i = 0; i < 80; i++) pts.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4 });
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pts.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.fillStyle = "rgba(0, 242, 255, 0.3)";
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); ctx.fill();
+                let d = Math.hypot(mouse.x - p.x, mouse.y - p.y);
+                if (d < 150) {
+                    ctx.strokeStyle = `rgba(0, 242, 255, ${1 - d / 150})`;
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+                }
+            });
+            requestAnimationFrame(loop);
+        }
+        init(); loop(); window.onresize = init;
+
+        // UI Logic
+        window.switchTab = (m) => {
+            const loginBtn = document.getElementById('t-login');
+            const regBtn = document.getElementById('t-reg');
+            const loginForm = document.getElementById('form-login');
+            const regForm = document.getElementById('form-register');
+
+            if (m === 'login') {
+                loginBtn.className = "flex-1 py-3 bg-cyan-500/20 text-cyan-400 border-r border-cyan-900/50";
+                regBtn.className = "flex-1 py-3 text-cyan-900";
+                loginForm.classList.remove('hidden');
+                regForm.classList.add('hidden');
+            } else {
+                loginBtn.className = "flex-1 py-3 text-cyan-900 border-r border-cyan-900/50";
+                regBtn.className = "flex-1 py-3 bg-cyan-500/20 text-cyan-400";
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
+            }
+        };
+
+        const chars = "X01_";
+        document.querySelectorAll('.scramble-text').forEach(el => {
+            const orig = el.innerText;
+            el.parentElement.onmouseenter = () => {
+                let c = 0;
+                const itv = setInterval(() => {
+                    el.innerText = orig.split("").map((l, i) => i < c ? orig[i] : chars[Math.floor(Math.random() * chars.length)]).join("");
+                    if (c >= orig.length) clearInterval(itv);
+                    c += 1 / 3;
+                }, 30);
+            };
+        });
+
+        // Backend Wiring
+        window.handleLogin = async () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            const msg = document.getElementById('login-msg');
+            const btn = document.getElementById('btn-login');
+            const span = btn.querySelector('span');
+            const originalText = span.innerText;
+
+            if (!email || !pass) { msg.innerText = "MISSING_CREDENTIALS"; return; }
+
+            span.innerText = "AUTHENTICATING...";
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            msg.innerText = "";
+
+            const result = await loginUser(email, pass);
+
+            if (result.success) {
+                span.innerText = "ACCESS_GRANTED";
+                btn.classList.remove('bg-cyan-500');
+                btn.classList.add('bg-green-500', 'text-black');
+
+                // Check user role to determine redirect
+                try {
+                    const { db, doc, getDoc } = await import("./scripts/auth.js");
+                    const userDoc = await getDoc(doc(db, "users", result.user.uid));
+
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        // Redirect based on role
+                        const redirectUrl = userData.role === 'admin' ? 'admin.html' : 'dashboard.html';
+                        setTimeout(() => { window.location.href = redirectUrl; }, 800);
+                    } else {
+                        // Default to dashboard if no profile found
+                        setTimeout(() => { window.location.href = "dashboard.html"; }, 800);
+                    }
+                } catch (error) {
+                    console.error("Role check failed:", error);
+                    setTimeout(() => { window.location.href = "dashboard.html"; }, 800);
+                }
+            } else {
+                span.innerText = originalText;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                msg.innerText = "ACCESS_DENIED: " + (result.message.split('(')[0] || "Auth Failed");
+            }
+        };
+
+        window.handleRegister = async () => {
+            const user = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+            const msg = document.getElementById('reg-msg');
+            const btn = document.getElementById('btn-reg');
+            const span = btn.querySelector('span');
+            const originalText = span.innerText;
+
+            if (!user || !email || !pass) { msg.innerText = "INCOMPLETE_DATA"; return; }
+
+            span.innerText = "REGISTERING...";
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            msg.innerText = "";
+
+            const result = await registerUser(email, pass, user, 'level_1');
+
+            if (result.success) {
+                span.innerText = "IDENTITY_VERIFIED";
+                btn.classList.add('bg-green-500', 'text-black', 'border-green-500');
+                // New users always go to dashboard (they're level_1 by default)
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1000);
+            } else {
+                span.innerText = originalText;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                msg.innerText = "REG_FAILED: " + (result.message.split('(')[0] || "Unknown Error");
+            }
+        };
+    </script>
+</body>
+
+</html>
