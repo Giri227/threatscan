@@ -1,0 +1,4 @@
+This is a harmless test file used to verify the ThreatScan live API deployment.
+It contains no malicious code.
+Deployment Verification Timestamp: 2026-01-12
+AI Check: Should return 'SAFE'.

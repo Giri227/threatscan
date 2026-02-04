@@ -1,0 +1,40 @@
+{
+  "name": "backend",
+  "version": "2.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "node test/testAll.js"
+  },
+  "keywords": [
+    "malware",
+    "detection",
+    "security",
+    "threat-intelligence"
+  ],
+  "author": "ThreatScan Team",
+  "license": "ISC",
+  "description": "Advanced Malware Detection System with ML, Network Intelligence, and Behavioral Analysis",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.5.1",
+    "express-validator": "^7.3.1",
+    "file-type": "^21.3.0",
+    "helmet": "^8.1.0",
+    "mongoose": "^9.1.3",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "systeminformation": "^5.30.3",
+    "uuid": "^9.0.1",
+    "winston": "^3.19.0"
+  },
+  "optionalDependencies": {
+    "@tensorflow/tfjs-node": "^4.17.0",
+    "pe-library": "^1.0.1"
+  }
+}

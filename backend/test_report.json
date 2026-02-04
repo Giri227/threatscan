@@ -1,0 +1,66 @@
+{
+  "passed": 15,
+  "failed": 0,
+  "details": [
+    {
+      "status": "pass",
+      "msg": "Health endpoint returns 200 OK"
+    },
+    {
+      "status": "pass",
+      "msg": "Status is \"ok\""
+    },
+    {
+      "status": "pass",
+      "msg": "Client info endpoint returns 200 OK"
+    },
+    {
+      "status": "pass",
+      "msg": "IP address detected"
+    },
+    {
+      "status": "pass",
+      "msg": "Dashboard endpoint returns 200 OK"
+    },
+    {
+      "status": "pass",
+      "msg": "CPU Load is a number (53%)"
+    },
+    {
+      "status": "pass",
+      "msg": "RAM Usage is a number (98%)"
+    },
+    {
+      "status": "pass",
+      "msg": "Activity feed is an array"
+    },
+    {
+      "status": "pass",
+      "msg": "Activity feed is NOT empty (4 items) - Heartbeat working!"
+    },
+    {
+      "status": "pass",
+      "msg": "URL Scan returns 200 OK"
+    },
+    {
+      "status": "pass",
+      "msg": "Verdict returned: Safe"
+    },
+    {
+      "status": "pass",
+      "msg": "Risk score calculated"
+    },
+    {
+      "status": "pass",
+      "msg": "File Scan returns 200 OK"
+    },
+    {
+      "status": "pass",
+      "msg": "Filename preserved"
+    },
+    {
+      "status": "pass",
+      "msg": "AI Analysis object is present (Integration Successful)"
+    }
+  ]
+}

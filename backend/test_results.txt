@@ -1,0 +1,77 @@
+﻿≡ƒº¬ Testing Malware Detection System - All Phases
+
+============================================================
+
+≡ƒôª Phase 1: Enhanced Detection Engines
+------------------------------------------------------------
+Γ£à Ensemble Predictor loads
+Γ£à PE Parser loads
+   ΓÜá∩╕Å  TensorFlow not available (optional dependency)
+Γ£à TensorFlow Model loads (optional)
+
+≡ƒîÉ Phase 2: Network Intelligence & Behavioral Analysis
+------------------------------------------------------------
+Γ£à URLhaus Service loads
+Γ£à PhishTank Service loads
+Γ£à DGA Detector loads
+2026-01-19 22:19:56 [[32minfo[39m]: DGA analysis completed {
+  "service": "malware-scanner",
+  "domain": "google.com",
+  "isDGA": true,
+  "score": 95
+}
+Γ¥î DGA Detector - Test legitimate domain
+   Error: False positive on legitimate domain
+2026-01-19 22:19:56 [[32minfo[39m]: DGA analysis completed {
+  "service": "malware-scanner",
+  "domain": "xjk8dh2kls9f3m.xyz",
+  "isDGA": true,
+  "score": 100
+}
+Γ£à DGA Detector - Test suspicious domain
+Γ£à Behavioral Analyzer loads
+Γ£à Context-Aware Scoring loads
+2026-01-19 22:19:56 [[32minfo[39m]: Context-aware scoring completed {
+  "service": "malware-scanner",
+  "baseScore": 50,
+  "adjustedScore": "100.00",
+  "adjustments": 3
+}
+Γ£à Context-Aware Scoring - Email attachment risk
+
+≡ƒ¢í∩╕Å  Phase 3: Evasion Detection & Distributed Architecture
+------------------------------------------------------------
+Γ£à Evasion Detector loads
+Γ£à Adaptive Analyzer loads
+Γ£à Task Queue loads
+2026-01-19 22:19:56 [[32minfo[39m]: Task enqueued {
+  "service": "malware-scanner",
+  "taskId": "task_1768841396769_c3dw15ylh",
+  "type": "test",
+  "queueSize": 1
+}
+Γ£à Task Queue - Enqueue/Dequeue
+Γ£à Worker Manager loads
+Γ£à Scan Orchestrator loads
+
+≡ƒöä Phase 4: Continuous Learning & Optimization
+------------------------------------------------------------
+Γ£à Feedback Collector loads
+Γ£à Model Version Manager loads
+Γ£à Active Learning Selector loads
+Γ¥î Retraining Pipeline loads
+   Error: Cannot find module '@tensorflow/tfjs-node'
+Require stack:
+- E:\Malware-Analysis-and-Detection-main\backend\src\engine\tensorflowModel.js
+- E:\Malware-Analysis-and-Detection-main\backend\src\services\retrainingPipeline.js
+- E:\Malware-Analysis-and-Detection-main\backend\test\testAll.js
+
+============================================================
+≡ƒôè Test Summary
+============================================================
+Total Tests: 21
+Γ£à Passed: 19
+Γ¥î Failed: 2
+Success Rate: 90.5%
+
+ΓÜá∩╕Å  Some tests failed. Please review errors above.

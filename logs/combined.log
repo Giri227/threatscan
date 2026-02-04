@@ -1,0 +1,28 @@
+{"level":"warn","message":"VirusTotal API key not configured","service":"malware-scanner","timestamp":"2026-01-19 22:54:59"}
+{"level":"warn","message":"PhishTank: API key not configured, skipping check","service":"malware-scanner","timestamp":"2026-01-19 22:54:59"}
+{"error":"Request failed with status code 401","level":"warn","message":"URLHaus lookup failed","service":"malware-scanner","timestamp":"2026-01-19 22:55:00"}
+{"error":"Request failed with status code 401","level":"error","message":"URLhaus API request failed","service":"malware-scanner","timestamp":"2026-01-19 22:55:00","url":"https://google.com"}
+{"domain":"https://google.com","isDGA":false,"level":"info","message":"DGA analysis completed","score":0,"service":"malware-scanner","timestamp":"2026-01-19 22:55:00"}
+{"confidence":"0.63","engines":2,"finalScore":25,"level":"info","message":"Score aggregation completed","requiresReview":false,"service":"malware-scanner","timestamp":"2026-01-19 22:55:00","verdict":"Safe"}
+{"adjustedScore":"30.00","adjustments":3,"baseScore":25,"level":"info","message":"Context-aware scoring completed","service":"malware-scanner","timestamp":"2026-01-19 22:55:00"}
+{"error":"ClamAV binary (clamscan/clamdscan) not found in system path.","filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","level":"warn","message":"ClamAV scan failed","service":"malware-scanner","timestamp":"2026-02-04 22:59:20"}
+{"entropy":5.201050808057334,"filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","isPE":false,"level":"info","message":"Features extracted","service":"malware-scanner","size":4626,"timestamp":"2026-02-04 22:59:20"}
+{"level":"warn","message":"TensorFlow not available, skipping model load","service":"malware-scanner","timestamp":"2026-02-04 22:59:20"}
+{"confidence":"0.10","disagreement":"low","level":"info","message":"Ensemble prediction completed","models":1,"score":"10.00","service":"malware-scanner","timestamp":"2026-02-04 22:59:20"}
+{"confidence":0.1,"disagreement":"low","level":"info","message":"ML prediction completed (ensemble)","score":10,"service":"malware-scanner","timestamp":"2026-02-04 22:59:20"}
+{"command":"E:\\Malware-Analysis-and-Detection-main\\bin\\clamav\\clamav-1.4.2.win.x64\\clamscan.exe","filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","level":"info","message":"ClamAV scan completed","service":"malware-scanner","timestamp":"2026-02-04 23:13:35"}
+{"entropy":5.201050808057334,"filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","isPE":false,"level":"info","message":"Features extracted","service":"malware-scanner","size":4626,"timestamp":"2026-02-04 23:13:35"}
+{"level":"warn","message":"TensorFlow not available, skipping model load","service":"malware-scanner","timestamp":"2026-02-04 23:13:35"}
+{"confidence":"0.10","disagreement":"low","level":"info","message":"Ensemble prediction completed","models":1,"score":"10.00","service":"malware-scanner","timestamp":"2026-02-04 23:13:35"}
+{"confidence":0.1,"disagreement":"low","level":"info","message":"ML prediction completed (ensemble)","score":10,"service":"malware-scanner","timestamp":"2026-02-04 23:13:35"}
+{"command":"E:\\Malware-Analysis-and-Detection-main\\bin\\clamav\\clamav-1.4.2.win.x64\\clamscan.exe","filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","level":"info","message":"ClamAV scan completed","service":"malware-scanner","timestamp":"2026-02-04 23:24:23"}
+{"entropy":5.201050808057334,"filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","isPE":false,"level":"info","message":"Features extracted","service":"malware-scanner","size":4626,"timestamp":"2026-02-04 23:24:23"}
+{"level":"warn","message":"TensorFlow not available, skipping model load","service":"malware-scanner","timestamp":"2026-02-04 23:24:23"}
+{"confidence":"0.10","disagreement":"low","level":"info","message":"Ensemble prediction completed","models":1,"score":"10.00","service":"malware-scanner","timestamp":"2026-02-04 23:24:23"}
+{"confidence":0.1,"disagreement":"low","level":"info","message":"ML prediction completed (ensemble)","score":10,"service":"malware-scanner","timestamp":"2026-02-04 23:24:23"}
+{"command":"E:\\Malware-Analysis-and-Detection-main\\bin\\clamav\\clamav-1.4.2.win.x64\\clamscan.exe","filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","level":"info","message":"ClamAV scan completed","service":"malware-scanner","timestamp":"2026-02-04 23:38:37"}
+{"entropy":5.201050808057334,"filePath":"E:\\Malware-Analysis-and-Detection-main\\README.md","isPE":false,"level":"info","message":"Features extracted","service":"malware-scanner","size":4626,"timestamp":"2026-02-04 23:38:37"}
+{"level":"warn","message":"TensorFlow not available, skipping model load","service":"malware-scanner","timestamp":"2026-02-04 23:38:37"}
+{"confidence":"0.10","disagreement":"low","level":"info","message":"Ensemble prediction completed","models":1,"score":"10.00","service":"malware-scanner","timestamp":"2026-02-04 23:38:37"}
+{"confidence":0.1,"disagreement":"low","level":"info","message":"ML prediction completed (ensemble)","score":10,"service":"malware-scanner","timestamp":"2026-02-04 23:38:37"}
+{"level":"info","message":"Engaging Gemini AI Simulation Mode (API Key Missing/Default)","service":"malware-scanner","timestamp":"2026-02-04 23:38:37"}
