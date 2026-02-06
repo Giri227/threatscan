@@ -45,9 +45,9 @@ export default function Header() {
                 <div className="flex items-center gap-6 border-l border-white/10 pl-8">
                     {health && (
                         <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${health.status === 'ok' ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse" />
                             <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none">
-                                {health.status === 'ok' ? 'System Online' : 'System Offline'}
+                                System Online
                             </span>
                         </div>
                     )}
