@@ -22,8 +22,8 @@ const ComingSoon = ({ title }) => (
         </div>
         <h2 className="text-2xl font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'var(--text-primary)' }}>{title}</h2>
         <p className="uppercase tracking-widest text-xs font-bold leading-relaxed opacity-60" style={{ color: 'var(--text-secondary)' }}>
-            Core module integration in progress.<br />
-            Heuristic nodes currently offline for this vector.
+            This module is being optimized.<br />
+            Heuristic analysis for this vector will be available soon.
         </p>
     </div>
 )
@@ -33,10 +33,8 @@ const AppContent = () => {
     const location = useLocation();
     const isRoot = location.pathname === '/';
 
-
     return (
         <div className="h-screen w-screen flex overflow-hidden relative" style={{ background: 'var(--bg-app)', color: 'var(--text-primary)' }}>
-
 
             {/* ⚛️ PERVASIVE NEURAL CORE BACKGROUND */}
             <div className={`fixed inset-0 z-0 transition-all duration-1000 ${!isRoot ? 'scale-75 blur-3xl opacity-20 translate-x-[-15%]' : 'scale-100 opacity-100'}`}>
