@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 import { Bell, User, Clock, Wifi, Shield, Monitor, Globe, Zap, Search, Activity } from 'lucide-react';
 import { getHealth } from '../services/api';
 
 export default function Header() {
+    const location = useLocation();
     const [health, setHealth] = useState(null);
     const [time, setTime] = useState(new Date());
 
@@ -63,13 +65,13 @@ export default function Header() {
 
             {/* Center - View Tabs (Visual Only Context) */}
             <div className="hidden lg:flex items-center gap-6 bg-slate-950/40 px-6 py-2 rounded-xl border border-white/5 shadow-inner">
-                <button className="p-1.5 rounded-lg text-slate-500 hover:text-white transition-all"><Monitor size={16} /></button>
+                <Link to="/" className={`p-1.5 rounded-lg transition-all ${location.pathname === '/' ? 'text-violet-400 bg-violet-500/10' : 'text-slate-500 hover:text-white'}`}><Monitor size={16} /></Link>
                 <div className="w-[1px] h-4 bg-white/5" />
-                <button className="p-1.5 rounded-lg text-violet-400 bg-violet-500/10"><Globe size={16} /></button>
+                <Link to="/url" className={`p-1.5 rounded-lg transition-all ${location.pathname === '/url' ? 'text-violet-400 bg-violet-500/10' : 'text-slate-500 hover:text-white'}`}><Globe size={16} /></Link>
                 <div className="w-[1px] h-4 bg-white/5" />
-                <button className="p-1.5 rounded-lg text-slate-500 hover:text-white transition-all"><Zap size={16} /></button>
+                <Link to="/system" className={`p-1.5 rounded-lg transition-all ${location.pathname === '/system' ? 'text-violet-400 bg-violet-500/10' : 'text-slate-500 hover:text-white'}`}><Zap size={16} /></Link>
                 <div className="w-[1px] h-4 bg-white/5" />
-                <button className="p-1.5 rounded-lg text-slate-500 hover:text-white transition-all"><Activity size={16} /></button>
+                <Link to="/network" className={`p-1.5 rounded-lg transition-all ${location.pathname === '/network' ? 'text-violet-400 bg-violet-500/10' : 'text-slate-500 hover:text-white'}`}><Activity size={16} /></Link>
             </div>
 
             {/* Right side - User & Global Actions */}

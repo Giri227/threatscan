@@ -35,6 +35,7 @@ const AppContent = () => {
 
     return (
         <div className="h-screen w-screen flex overflow-hidden relative" style={{ background: 'var(--bg-app)', color: 'var(--text-primary)' }}>
+            <Sidebar />
 
             {/* ⚛️ PERVASIVE NEURAL CORE BACKGROUND */}
             <div className={`fixed inset-0 z-0 transition-all duration-1000 ${!isRoot ? 'scale-75 blur-3xl opacity-20 translate-x-[-15%]' : 'scale-100 opacity-100'}`}>
@@ -42,65 +43,67 @@ const AppContent = () => {
             </div>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0 relative z-10 h-full">
-                <Header />
+            <div className={`flex-1 flex flex-col min-w-0 relative z-10 h-full ${isRoot ? 'pointer-events-none' : ''}`}>
+                <div className="pointer-events-auto flex flex-col h-full">
+                    <Header />
 
-                <main className="flex-1 overflow-hidden relative h-full">
-                    <AnimatePresence mode="wait">
-                        <Routes location={location} key={location.pathname}>
-                            <Route path="/" element={null} /> {/* Root is handled by the background NeuralCore */}
+                    <main className="flex-1 overflow-hidden relative h-full">
+                        <AnimatePresence mode="wait">
+                            <Routes location={location} key={location.pathname}>
+                                <Route path="/" element={null} /> {/* Root is handled by the background NeuralCore */}
 
-                            {/* Orbital Sub-Views */}
-                            <Route path="/file" element={
-                                <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar flex items-center justify-center">
-                                    <motion.div
-                                        initial={{ opacity: 0, x: 100, scale: 0.9 }}
-                                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                                        exit={{ opacity: 0, x: -100, scale: 0.9 }}
-                                        className="w-full max-w-5xl glass-mesh rounded-[2.5rem] p-6 md:p-10 shadow-2xl"
-                                    >
-                                        <FileScanView />
-                                    </motion.div>
-                                </div>
-                            } />
+                                {/* Orbital Sub-Views */}
+                                <Route path="/file" element={
+                                    <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar flex items-center justify-center">
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 100, scale: 0.9 }}
+                                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                                            exit={{ opacity: 0, x: -100, scale: 0.9 }}
+                                            className="w-full max-w-5xl glass-mesh rounded-[2.5rem] p-6 md:p-10 shadow-2xl"
+                                        >
+                                            <FileScanView />
+                                        </motion.div>
+                                    </div>
+                                } />
 
-                            <Route path="/url" element={
-                                <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar flex items-center justify-center">
-                                    <motion.div
-                                        initial={{ opacity: 0, x: 100, scale: 0.9 }}
-                                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                                        exit={{ opacity: 0, x: -100, scale: 0.9 }}
-                                        className="w-full max-w-5xl glass-mesh rounded-[2.5rem] p-6 md:p-10 shadow-2xl"
-                                    >
-                                        <URLAnalysisView />
-                                    </motion.div>
-                                </div>
-                            } />
+                                <Route path="/url" element={
+                                    <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar flex items-center justify-center">
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 100, scale: 0.9 }}
+                                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                                            exit={{ opacity: 0, x: -100, scale: 0.9 }}
+                                            className="w-full max-w-5xl glass-mesh rounded-[2.5rem] p-6 md:p-10 shadow-2xl"
+                                        >
+                                            <URLAnalysisView />
+                                        </motion.div>
+                                    </div>
+                                } />
 
-                            <Route path="/system" element={
-                                <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar flex items-center justify-center">
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 100 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -100 }}
-                                        className="w-full max-w-5xl glass-mesh rounded-[2.5rem] p-6 md:p-10"
-                                    >
-                                        <SystemInfoView />
-                                    </motion.div>
-                                </div>
-                            } />
+                                <Route path="/system" element={
+                                    <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar flex items-center justify-center">
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 100 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -100 }}
+                                            className="w-full max-w-5xl glass-mesh rounded-[2.5rem] p-6 md:p-10"
+                                        >
+                                            <SystemInfoView />
+                                        </motion.div>
+                                    </div>
+                                } />
 
-                            <Route path="/network" element={
-                                <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar">
-                                    <NetworkView />
-                                </div>
-                            } />
+                                <Route path="/network" element={
+                                    <div className="h-full w-full p-4 md:p-12 overflow-y-auto custom-scrollbar">
+                                        <NetworkView />
+                                    </div>
+                                } />
 
-                            <Route path="/settings" element={<ComingSoon title="Node Configuration" />} />
-                            <Route path="*" element={<Navigate to="/" replace />} />
-                        </Routes>
-                    </AnimatePresence>
-                </main>
+                                <Route path="/settings" element={<ComingSoon title="Node Configuration" />} />
+                                <Route path="*" element={<Navigate to="/" replace />} />
+                            </Routes>
+                        </AnimatePresence>
+                    </main>
+                </div>
             </div>
 
             {/* Floating Toaster */}
