@@ -26,48 +26,16 @@ const ComingSoon = ({ title }) => (
         </p>
     </div>
 )
-const ServerOfflineOverlay = () => (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-md">
-        <div className="p-8 rounded-3xl bg-slate-900 border border-red-500/20 max-w-md w-full text-center shadow-2xl">
-            <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto mb-6 animate-pulse">
-                <div className="w-8 h-8 rounded-full bg-red-500" />
-            </div>
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">Secure Core Unreachable</h2>
-            <p className="text-slate-400 text-sm font-medium mb-6 leading-relaxed">
-                The analysis engine is currently offline or unreachable. Security protocols have suspended the dashboard to prevent data loss.
-            </p>
-            <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-widest">
-                <div className="w-2 h-2 rounded-full bg-orange-500 animate-bounce" />
-                Retrying Connection...
-            </div>
-        </div>
-    </div>
-);
+
 
 const AppContent = () => {
     const location = useLocation();
     const isRoot = location.pathname === '/';
-    const [isServerOnline, setIsServerOnline] = React.useState(true);
 
-    React.useEffect(() => {
-        const checkHealth = async () => {
-            try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/health`);
-                if (res.ok) setIsServerOnline(true);
-                else throw new Error('Health check failed');
-            } catch (err) {
-                console.warn('Server offline:', err);
-                setIsServerOnline(false);
-            }
-        };
-        checkHealth();
-        const interval = setInterval(checkHealth, 5000);
-        return () => clearInterval(interval);
-    }, []);
 
     return (
         <div className="h-screen w-screen flex overflow-hidden relative" style={{ background: 'var(--bg-app)', color: 'var(--text-primary)' }}>
-            {!isServerOnline && <ServerOfflineOverlay />}
+
 
             {/* ⚛️ PERVASIVE NEURAL CORE BACKGROUND */}
             <div className={`fixed inset-0 z-0 transition-all duration-1000 ${!isRoot ? 'scale-75 blur-3xl opacity-20 translate-x-[-15%]' : 'scale-100 opacity-100'}`}>
