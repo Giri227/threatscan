@@ -11,7 +11,8 @@ import SystemInfoView from './pages/SystemInfoView'
 import URLAnalysisView from './pages/URLAnalysisView'
 import NetworkView from './pages/NetworkView'
 
-import { useLocation, AnimatePresence } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Placeholder views for now
 const ComingSoon = ({ title }) => (
